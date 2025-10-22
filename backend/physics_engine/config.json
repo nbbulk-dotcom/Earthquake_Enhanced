@@ -1,0 +1,62 @@
+{
+  "version": "2.0.0",
+  "system": "deterministic_measurement",
+  "description": "Physics-based seismic stress measurement system",
+  
+  "thresholds": {
+    "strain_rate_per_year": 1.0e-7,
+    "fault_proximity_km": 10.0,
+    "minimum_magnitude": 2.5,
+    "alert_magnitude": 5.0
+  },
+  
+  "physical_constants": {
+    "rigidity_mu_Pa": 3.0e10,
+    "comment": "Shear modulus for crustal rocks (Aki & Richards, 2002)"
+  },
+  
+  "regions": {
+    "california": {
+      "name": "California",
+      "bounds": {
+        "min_lat": 32.0,
+        "max_lat": 42.0,
+        "min_lon": -125.0,
+        "max_lon": -114.0
+      },
+      "description": "California seismic zone"
+    },
+    "japan": {
+      "name": "Japan",
+      "bounds": {
+        "min_lat": 30.0,
+        "max_lat": 46.0,
+        "min_lon": 129.0,
+        "max_lon": 146.0
+      },
+      "description": "Japanese archipelago"
+    },
+    "tokyo": {
+      "name": "Tokyo Region",
+      "bounds": {
+        "min_lat": 35.0,
+        "max_lat": 36.5,
+        "min_lon": 138.5,
+        "max_lon": 140.5
+      },
+      "description": "Greater Tokyo metropolitan area"
+    }
+  },
+  
+  "data_sources": {
+    "primary": "USGS Earthquake Catalog",
+    "api_endpoint": "https://earthquake.usgs.gov/fdsnws/event/1/query",
+    "format": "geojson"
+  },
+  
+  "provenance": {
+    "checksum_algorithm": "SHA-256",
+    "version_control": true,
+    "metadata_required": true
+  }
+}

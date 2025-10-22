@@ -1,0 +1,71 @@
+# Data Manifest - Canonical Data Sources
+# All data sources with versioning and checksums for provenance
+
+version: "1.0.0"
+last_updated: "2025-10-22"
+
+primary_sources:
+  usgs_earthquake_catalog:
+    name: "USGS Earthquake Catalog"
+    url: "https://earthquake.usgs.gov/fdsnws/event/1/"
+    api_version: "1.0"
+    description: "Primary source for earthquake event data"
+    update_frequency: "real-time"
+    data_format: "GeoJSON"
+    parameters:
+      - minmagnitude: 2.5
+      - orderby: "time-asc"
+    checksum_method: "SHA-256"
+    provenance_required: true
+
+  usgs_fault_database:
+    name: "USGS Quaternary Fault Database"
+    url: "https://earthquake.usgs.gov/hazards/qfaults/"
+    version: "2023-Q4"
+    description: "Fault line geometries for proximity calculations"
+    data_format: "GeoJSON"
+    checksum_method: "SHA-256"
+
+supplementary_sources:
+  jma_catalog:
+    name: "Japan Meteorological Agency Catalog"
+    url: "https://www.data.jma.go.jp/svd/eqev/data/bulletin/"
+    region: "Japan"
+    description: "Supplementary data for Japanese regions"
+    enabled: false
+
+  emsc_catalog:
+    name: "European-Mediterranean Seismological Centre"
+    url: "https://www.emsc-csem.org/Earthquake/"
+    region: "Europe/Mediterranean"
+    description: "Supplementary data for European regions"
+    enabled: false
+
+data_retention:
+  raw_data:
+    retention_period: "indefinite"
+    storage_location: "data/raw/"
+    backup_required: true
+  
+  processed_data:
+    retention_period: "indefinite"
+    storage_location: "data/processed/"
+    backup_required: true
+  
+  checksums:
+    retention_period: "indefinite"
+    storage_location: "data/checksums/"
+
+quality_control:
+  minimum_magnitude: 2.5
+  maximum_depth_km: 700
+  location_uncertainty_km: 50
+  time_uncertainty_seconds: 10
+
+metadata_requirements:
+  - source_url
+  - fetch_timestamp
+  - data_version
+  - checksum_sha256
+  - parameter_set
+  - record_count

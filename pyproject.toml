@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "earthquake-enhanced"
+version = "2.0.0"
+description = "Empirical Seismic Stress Measurement System - Deterministic Physics-Based Analysis"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Earthquake Enhanced Team"}
+]
+keywords = ["seismology", "earthquake", "physics", "measurement", "deterministic"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
+dependencies = [
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "scipy>=1.10.0",
+    "requests>=2.31.0",
+    "pyyaml>=6.0",
+    "python-dateutil>=2.8.2",
+    "pyproj>=3.5.0",
+    "shapely>=2.0.0",
+    "rtree>=1.0.0",
+    "obspy>=1.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.3.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.3.0",
+    "flake8>=6.0.0",
+    "mypy>=1.3.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["backend*", "tests*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311']
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --cov=backend --cov-report=term-missing"

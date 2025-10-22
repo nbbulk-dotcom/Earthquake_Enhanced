@@ -1,0 +1,43 @@
+# Feature Configuration
+
+version: "2.0.0"
+description: "Feature extraction configuration for deterministic measurement system"
+
+# Note: This system does NOT use features for ML prediction
+# Features are only for descriptive analysis and visualization
+
+spatial_features:
+  - name: "epicenter_density"
+    description: "Number of earthquakes per unit area"
+    unit: "events/km²"
+  
+  - name: "depth_distribution"
+    description: "Distribution of earthquake depths"
+    unit: "km"
+  
+  - name: "magnitude_distribution"
+    description: "Distribution of magnitudes"
+    unit: "Mw"
+
+temporal_features:
+  - name: "event_rate"
+    description: "Number of events per unit time"
+    unit: "events/day"
+  
+  - name: "cumulative_moment"
+    description: "Cumulative seismic moment over time"
+    unit: "N⋅m"
+
+physical_features:
+  - name: "strain_rate"
+    description: "Kostrov strain rate"
+    unit: "per year"
+    formula: "ΣM₀ / (2μVT)"
+  
+  - name: "seismic_moment"
+    description: "Total seismic moment"
+    unit: "N⋅m"
+    formula: "10^(1.5×Mw + 9.1)"
+
+# These are NOT used for prediction
+# Only for descriptive statistics and visualization
