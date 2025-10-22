@@ -67,6 +67,19 @@ earthquake-enhanced/
 - Generates alerts when thresholds exceeded
 - Maintains calculation provenance
 
+### Resonance Analysis (`backend/features/`)
+- **Modal Spectral Curves**: Eigendecomposition of cross-spectral density matrices
+- **Resonant Frequency Detection**: Identifies coherent oscillations across station networks
+- **Geometry-Based Estimates**: f_geom ≈ Vs / (2L) for characteristic length L
+- **Quality Factor (Q)**: Measures sharpness of resonance peaks
+- **Multi-Band Analysis**: Analyzes very low (0.001-0.1 Hz), low (0.1-1 Hz), and medium (1-10 Hz) frequencies
+- **Integration with Triangulation**: Combines spatial strain rate with frequency-domain resonance
+
+#### Physics References:
+- Bendat & Piersol (2010): Random Data Analysis and Measurement Procedures
+- Lacoss et al. (1969): Estimation of Seismic Noise Structure using Arrays
+- Aki & Richards (2002): Quantitative Seismology (Chapter 5: Resonance)
+
 ## Installation
 
 ```bash
@@ -101,7 +114,30 @@ cd experiments/tokyo
 ### Run Tests
 ```bash
 make test
+
+# Run all tests including resonance module
+pytest
+
+# Run only resonance tests
+pytest backend/features/tests/test_resonance.py -v
+
+# Run resonance module standalone example
+python backend/features/resonance.py
+
+# Run triangle feature extraction example
+python backend/features/tri_feature.py
 ```
+
+#### Resonance Test Coverage
+The resonance analysis module includes comprehensive tests:
+- **Coherent Sine Wave Tests**: Verify peak detection with known frequencies
+- **Geometry Calculation Tests**: Validate f_geom = Vs / (2L) formula
+- **Q-Factor Tests**: Test half-power bandwidth calculation
+- **Transfer Function Tests**: Verify frequency response computation
+- **Integration Tests**: Full workflow from waveform to resonance features
+- **Determinism Tests**: Ensure same input → same output
+
+All tests use synthetic data with known properties to validate numerical accuracy.
 
 ## Data Sources
 
