@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earthquake Enhanced - Multi-Resonance Visualization</title>
+    <link rel="stylesheet" href="../static/css/main.css">
+    <link rel="stylesheet" href="../static/css/visualization.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🌍 Earthquake Enhanced System</h1>
+                <p class="subtitle">Multi-Resonance Overlay Analysis & Prediction</p>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="overlay">Resonance Overlay</button>
+                <button class="nav-tab" data-tab="prediction">21-Day Prediction</button>
+                <button class="nav-tab" data-tab="patterns">Pattern Analysis</button>
+                <button class="nav-tab" data-tab="analytics">Analytics</button>
+            </nav>
+        </header>
+
+        <!-- Control Panel -->
+        <aside class="control-panel">
+            <h2>Control Panel</h2>
+            
+            <div class="control-section">
+                <h3>Location</h3>
+                <div class="input-group">
+                    <label for="latitude">Latitude:</label>
+                    <input type="number" id="latitude" value="35.6762" step="0.0001" min="-90" max="90">
+                </div>
+                <div class="input-group">
+                    <label for="longitude">Longitude:</label>
+                    <input type="number" id="longitude" value="139.6503" step="0.0001" min="-180" max="180">
+                </div>
+                <div class="input-group">
+                    <label for="depth">Depth (km):</label>
+                    <input type="number" id="depth" value="15" step="1" min="0" max="700">
+                </div>
+                <button id="analyzeBtn" class="btn-primary">Analyze</button>
+            </div>
+
+            <div class="control-section">
+                <h3>Analysis Type</h3>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="analysisType" value="single" checked>
+                        Single Point
+                    </label>
+                    <label>
+                        <input type="radio" name="analysisType" value="multi">
+                        Multi-Fault Region
+                    </label>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Visualization Options</h3>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="showSpace" checked>
+                        Space Resonances
+                    </label>
+                    <label>
+                        <input type="checkbox" id="showStrain" checked>
+                        Strain-Rate Resonances
+                    </label>
+                    <label>
+                        <input type="checkbox" id="showAmplification" checked>
+                        Amplification Zones
+                    </label>
+                    <label>
+                        <input type="checkbox" id="showCancellation">
+                        Cancellation Zones
+                    </label>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Resonance Statistics</h3>
+                <div class="stats-display">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Sources:</span>
+                        <span class="stat-value" id="totalSources">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Overlay Count:</span>
+                        <span class="stat-value" id="overlayCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Coherence:</span>
+                        <span class="stat-value" id="coherenceValue">0.00</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Risk Level:</span>
+                        <span class="stat-value risk-badge" id="riskLevel">LOW</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Animation Control</h3>
+                <button id="playBtn" class="btn-secondary">▶ Play</button>
+                <button id="pauseBtn" class="btn-secondary">⏸ Pause</button>
+                <button id="resetBtn" class="btn-secondary">↺ Reset</button>
+                <div class="slider-group">
+                    <label for="timeSlider">Time Step:</label>
+                    <input type="range" id="timeSlider" min="0" max="24" value="0" step="1">
+                    <span id="timeDisplay">0h</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Tab Content: Resonance Overlay -->
+            <div id="overlayTab" class="tab-content active">
+                <div class="visualization-container">
+                    <h2>Multi-Resonance Overlay Visualization</h2>
+                    <div id="overlay3D" class="viz-3d"></div>
+                    <div class="overlay-info">
+                        <div class="info-panel">
+                            <h3>Resultant Frequency</h3>
+                            <div class="frequency-display">
+                                <span id="resultantFreq">0.00</span> Hz
+                            </div>
+                        </div>
+                        <div class="info-panel">
+                            <h3>Interference Type</h3>
+                            <div class="interference-display" id="interferenceType">
+                                Mixed
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: 21-Day Prediction -->
+            <div id="predictionTab" class="tab-content">
+                <div class="prediction-container">
+                    <h2>21-Day Forward Prediction</h2>
+                    <button id="generatePredictionBtn" class="btn-primary">Generate Prediction</button>
+                    <div id="predictionChart" class="chart-container"></div>
+                    <div class="prediction-summary" id="predictionSummary"></div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Pattern Analysis -->
+            <div id="patternsTab" class="tab-content">
+                <div class="patterns-container">
+                    <h2>Recurring Resonance Patterns</h2>
+                    <button id="identifyPatternsBtn" class="btn-primary">Identify Patterns</button>
+                    <div id="patternsDisplay" class="patterns-list"></div>
+                    <div id="patternEvolution" class="chart-container"></div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Analytics -->
+            <div id="analyticsTab" class="tab-content">
+                <div class="analytics-container">
+                    <h2>Analytics Dashboard</h2>
+                    <div class="analytics-grid">
+                        <div class="analytics-card">
+                            <h3>Frequency Distribution</h3>
+                            <canvas id="freqDistChart"></canvas>
+                        </div>
+                        <div class="analytics-card">
+                            <h3>Amplitude Over Time</h3>
+                            <canvas id="amplitudeChart"></canvas>
+                        </div>
+                        <div class="analytics-card">
+                            <h3>Coherence Timeline</h3>
+                            <canvas id="coherenceChart"></canvas>
+                        </div>
+                        <div class="analytics-card">
+                            <h3>Risk Assessment</h3>
+                            <canvas id="riskChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Earthquake Enhanced System | BRETT v1.0 | Multi-Resonance Correlation Engine</p>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Analyzing resonance patterns...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../static/js/api.js"></script>
+    <script src="../static/js/visualization3d.js"></script>
+    <script src="../static/js/prediction.js"></script>
+    <script src="../static/js/patterns.js"></script>
+    <script src="../static/js/analytics.js"></script>
+    <script src="../static/js/main.js"></script>
+</body>
+</html>

@@ -1,70 +1,126 @@
+# 🌍 Earthquake Enhanced System
 
-# 🌍 Earthquake Enhanced - Space Engine
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/Tests-20/20-success.svg)](backend/features/tests/)
 
-[![Python](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Blue_Python_3.8_Shield_Badge.svg/2560px-Blue_Python_3.8_Shield_Badge.svg.png)
-[![FastAPI](https://i.ytimg.com/vi/BCXdLx6xHmc/maxresdefault.jpg)
-[![License](https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/MIT_Logo_New.svg/1200px-MIT_Logo_New.svg.png)
+A comprehensive multi-resonance overlay analysis system for earthquake prediction using space weather correlation and strain-rate resonance analysis.
 
-**Space Weather Correlation Engine for Earthquake Prediction**
+## 🎯 Core Principle
 
-Advanced earthquake prediction system integrating space weather data with seismic analysis using empirical physics-based calculations.
+**"The earth reacts to resonance"** - This system identifies common denominators through pattern recognition from historical data using multiple resonance sources.
 
----
+## ✨ Features
 
-## 🎯 Features
+### Correlation Engine (8 Core Features)
 
-### 8 Core Features Implemented
+1. **Multi-Resonance Overlay Analysis**
+   - Integrates space engine resonances (RGB, solar, geomagnetic, ionospheric)
+   - Integrates strain-rate resonances
+   - Supports custom resonance sources
+   - Tracks and names each resonance set with unique identifiers
 
-1. **🌐 85km/80km Atmospheric Boundary Refraction**
-   - 1.15 calibration factor for 80km boundary
-   - 1.12 calibration factor for 85km boundary
-   - Physics-based refraction corrections
+2. **Resultant Frequency Calculation**
+   - Wave superposition using empirical formulas: `ψ(t) = Σᵢ Aᵢ * cos(2π * fᵢ * t + φᵢ)`
+   - Constructive and destructive interference detection
+   - Amplitude changes in overlap zones
+   - Beat frequency detection
 
-2. **📐 Angle of Incidence Tracking**
-   - Solar elevation calculations using spherical trigonometry
-   - Tetrahedral angles: 54.74° (volcanic), 26.52° (seismic)
-   - Geographic to magnetic latitude conversion
+3. **Coherence and Amplification Detection**
+   - Phase alignment detection using coherence coefficient: `|Σᵢ Aᵢ * e^(iφᵢ)| / Σᵢ Aᵢ`
+   - Amplification zone identification (constructive interference)
+   - Cancellation zone identification (destructive interference)
+   - Quality factors (Q) for resonance peaks
 
-3. **☀️ Sun Path Prediction**
+4. **Pattern Identification**
+   - Recurring resonance patterns across multiple sources
+   - Temporal evolution tracking
+   - Pattern similarity metrics using normalized cross-correlation
+   - Pattern matching for prediction
+
+5. **21-Day Forward Prediction**
+   - Future resonance calculations from current day
+   - Sun path prediction for future space resonances
+   - Confidence intervals based on data reliability
+   - Risk scoring with time decay
+
+6. **Geolocated Point Analysis**
+   - Single-point analysis for specific locations
+   - Multi-fault regions with triangulation points
+   - Regional aggregation for multi-point analysis
+   - Distance-based amplitude attenuation
+
+7. **Resonance Set Tracking**
+   - Registry of all active resonance sources
+   - Overlay counting at any time/location
+   - Summary statistics (max overlays, dominant frequencies)
+   - Query by location, time, or resonance type
+
+8. **Data Preparation for Visualization**
+   - 3D wireframe visualization data
+   - Color coding for different resonance sources
+   - Time-series animation data
+   - Real-time updates
+
+### Space Engine (8 Core Features)
+
+1. **85km/80km Atmospheric Boundary Refraction**
+   - Calibration factors: 1.12 (85km), 1.15 (80km)
+   - Linear interpolation between boundaries
+
+2. **Angle of Incidence Tracking**
+   - Solar elevation using spherical trigonometry
+   - Tetrahedral angles (volcanic: 54.74°, seismic: 26.52°)
+   - Magnetic latitude conversion
+
+3. **Sun Path Prediction**
+   - 24-hour sun path prediction
+   - Ray path geometry calculations
    - Stationary Earth reference frame
-   - Predictive ray path calculations
-   - 24-hour ahead predictions
 
-4. **⏱️ Dynamic Lag Time Calculation**
-   - Light travel base delay: ~8.3 minutes
+4. **Dynamic Lag Time Calculation**
+   - Physics-based transmission delays
    - Solar lag: 4-12 hours (seasonal variation)
    - Geomagnetic lag: 4-8 hours (diurnal variation)
-   - Ionospheric lag: 1-7 hours (semi-diurnal variation)
+   - Ionospheric lag: 1-7 hours (semi-diurnal)
 
-5. **🌈 RGB Resonance Calculations**
+5. **RGB Resonance Calculations**
+   - R (Red): Solar wind, flares, CME
+   - G (Green): Magnetic fields, geomagnetic, magnetosphere
+   - B (Blue): Cosmic rays, ionospheric, atmospheric
    - Formula: `sqrt((R² + G² + B²) / 3.0)`
-   - R = Solar wind related variables
-   - G = Magnetic field related variables
-   - B = Particle flux related variables
 
-6. **📡 Data Integration**
+6. **Data Integration**
    - NASA OMNI2 API (88% reliability)
    - NOAA SWPC API (92% reliability)
    - Real-time space weather data
-   - Graceful failure handling
+   - Graceful fallback when unavailable
 
-7. **🎯 Resultant Resonance Calculations**
-   - 12-dimensional correlation matrix
-   - Eigenvalue analysis
-   - Cross-variable correlations
+7. **Resultant Resonance Calculations**
+   - 12D correlation matrix for space variables
+   - Eigenvalue analysis for dominant modes
+   - Cross-correlation between variables
+   - Spatial and temporal factors
 
-8. **🌍 Equatorial Enhancement**
-   - 1.25× enhancement factor for equatorial regions (±23.5°)
-   - Latitude-based tapering
+8. **Equatorial Enhancement**
+   - 1.25 enhancement factor for equatorial regions (±23.5°)
+   - Tapered enhancement based on distance from equator
 
----
+### Resonance Engine
+
+- **Strain-Rate Tensor Calculations**: `εᵢⱼ = 1/2 (∂vᵢ/∂xⱼ + ∂vⱼ/∂xᵢ)`
+- **Crustal Stress Resonance**: Tectonic plate boundary analysis
+- **Harmonic Frequency Detection**: Spectral peak identification
+- **Seismic Wave Propagation**: P-wave and S-wave travel times
+- **Quality Factor (Q)**: Resonance peak sharpness
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- pip (Python package manager)
+- Python 3.11+
+- pip
 - Git
 
 ### Installation
@@ -80,261 +136,239 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Initialize database
+python -c "from backend.models import get_database_manager; get_database_manager().create_all_tables()"
 ```
 
-### Running the Application
+### Running the System
 
-#### 1. Start the API Server
+#### Start Backend API
 
 ```bash
-cd backend
-python api.py
+# From project root
+python backend/api.py
+
+# API will be available at http://localhost:8000
+# Interactive docs at http://localhost:8000/docs
 ```
 
-The API will be available at: `http://localhost:8000`
-
-API Documentation: `http://localhost:8000/docs`
-
-#### 2. Open the Frontend
-
-Open `frontend/templates/index.html` in your web browser, or serve it with a local server:
+#### Open Frontend
 
 ```bash
-cd frontend/templates
-python -m http.server 8080
+# Open in browser
+open frontend/templates/visualization.html
+# Or navigate to: file:///path/to/Earthquake_Enhanced/frontend/templates/visualization.html
 ```
 
-Then navigate to: `http://localhost:8080`
+## 📊 Usage Examples
 
----
+### Python API
 
-## 📖 API Documentation
+```python
+import asyncio
+from backend.features.correlation_engine import get_correlation_engine
 
-### Main Prediction Endpoint
+# Initialize engine
+engine = get_correlation_engine()
 
-**POST** `/api/v1/prediction`
+# Single-point analysis
+async def analyze():
+    result = await engine.analyze_single_point(
+        latitude=35.6762,   # Tokyo
+        longitude=139.6503,
+        depth_km=15.0
+    )
+    print(f"Overlay Count: {result['overlay_region']['overlay_count']}")
+    print(f"Coherence: {result['coherence']['coherence_coefficient']:.2f}")
+    print(f"Risk Level: {result['overlay_region']['risk_level']}")
 
-Calculate comprehensive space engine prediction.
-
-**Request Body:**
-```json
-{
-  "latitude": 35.0,
-  "longitude": 140.0,
-  "timestamp": "2024-06-21T12:00:00Z",
-  "include_historical": false
-}
+asyncio.run(analyze())
 ```
 
-**Response:**
-```json
-{
-  "success": true,
-  "timestamp": "2024-06-21T12:00:00",
-  "location": {
-    "latitude": 35.0,
-    "longitude": 140.0,
-    "magnetic_latitude": 25.3
-  },
-  "earthquake_correlation_score": 0.752,
-  "solar_angles": {...},
-  "rgb_resonance": {...},
-  "lag_times": {...},
-  "resultant_resonance": {...},
-  "equatorial_enhancement": {...}
-}
+### 21-Day Prediction
+
+```python
+# Generate prediction
+prediction = await engine.generate_21day_prediction(
+    latitude=35.6762,
+    longitude=139.6503,
+    depth_km=15.0
+)
+
+# Access daily predictions
+for day in prediction['daily_predictions']:
+    print(f"Day {day['day']}: Risk {day['risk_level']} (Score: {day['risk_score']:.2f})")
+
+# Summary
+summary = prediction['summary']
+print(f"Peak Risk: Day {summary['peak_risk_day']} ({summary['peak_risk_level']})")
 ```
 
-### Other Endpoints
+### Multi-Fault Region (Tokyo Example)
 
-- **GET** `/api/v1/status` - Engine status
-- **POST** `/api/v1/solar-angles` - Solar angle calculations
-- **POST** `/api/v1/lag-times` - Lag time calculations
-- **POST** `/api/v1/rgb-resonance` - RGB resonance calculation
-- **GET** `/api/v1/sun-path` - Sun path prediction
-- **GET** `/api/v1/atmospheric-boundary` - Boundary factors
-- **GET** `/api/v1/equatorial-enhancement` - Enhancement calculation
+```python
+# Triangulation points around Tokyo
+triangulation_points = [
+    (35.6762, 139.6503),  # Central Tokyo
+    (35.7, 139.7),        # Northeast
+    (35.6, 139.6),        # Southwest
+    (35.65, 139.75)       # East
+]
 
-Full API documentation available at: `http://localhost:8000/docs`
+result = await engine.analyze_multi_fault_region(
+    center_lat=35.6762,
+    center_lon=139.6503,
+    triangulation_points=triangulation_points,
+    depth_km=15.0
+)
 
----
+print(f"Regional Risk: {result['risk_level']}")
+print(f"Amplification Zones: {len(result['amplification_zones'])}")
+```
 
 ## 🧪 Testing
 
-### Run Unit Tests
+Run the comprehensive test suite:
 
 ```bash
-cd backend
-python -m pytest features/tests/test_space_engine.py -v
+# Run all tests
+pytest backend/features/tests/test_correlation_engine.py -v
+
+# Run with coverage
+pytest backend/features/tests/ --cov=backend/features --cov-report=html
+
+# Results: 20/20 tests passing ✅
 ```
 
-Or run with coverage:
-
-```bash
-python -m pytest features/tests/test_space_engine.py --cov=features.space_engine --cov-report=html
-```
-
-### Test Coverage
-
-The test suite includes:
-- ✅ Atmospheric boundary refraction tests
-- ✅ Angle of incidence tracking tests
-- ✅ Sun path prediction tests
-- ✅ Dynamic lag time calculation tests
-- ✅ RGB resonance calculation tests
-- ✅ Data integration tests (with mocking)
-- ✅ Resultant resonance calculation tests
-- ✅ Equatorial enhancement tests
-- ✅ Edge case tests
-- ✅ Integration tests
-
----
-
-## 📊 Architecture
+## 🏗️ Architecture
 
 ```
 Earthquake_Enhanced/
 ├── backend/
 │   ├── features/
-│   │   ├── space_engine.py      # Core space engine module
+│   │   ├── space_engine.py          # Space weather correlation (8 features)
+│   │   ├── resonance.py             # Strain-rate analysis
+│   │   ├── correlation_engine.py    # Multi-resonance overlay (8 features)
 │   │   └── tests/
-│   │       └── test_space_engine.py
-│   └── api.py                   # FastAPI application
+│   │       └── test_correlation_engine.py
+│   ├── models/
+│   │   └── database.py              # SQLAlchemy models
+│   ├── utils/
+│   └── api.py                       # FastAPI backend
 ├── frontend/
 │   ├── static/
 │   │   ├── css/
-│   │   │   └── styles.css       # Styling
+│   │   │   ├── main.css
+│   │   │   └── visualization.css
 │   │   └── js/
-│   │       └── app.js           # Frontend logic
+│   │       ├── api.js               # API client
+│   │       ├── visualization3d.js   # Three.js 3D viz
+│   │       ├── prediction.js        # Prediction charts
+│   │       ├── patterns.js          # Pattern analysis
+│   │       ├── analytics.js         # Dashboard
+│   │       └── main.js              # Main app logic
 │   └── templates/
-│       └── index.html           # Main UI
-├── docs/
-│   └── TECHNICAL.md             # Technical documentation
-├── config/
-│   └── config.yaml              # Configuration
+│       └── visualization.html       # Main UI
 ├── requirements.txt
 └── README.md
 ```
 
----
+## 📖 API Documentation
 
-## 🔬 Technical Details
+### REST API Endpoints
 
-### Physics Constants
+- `GET /` - Root with endpoint list
+- `GET /api/status` - System status
+- `POST /api/analyze/single` - Single-point analysis
+- `POST /api/analyze/multi-fault` - Multi-fault region analysis
+- `POST /api/predict/21-day` - 21-day prediction
+- `GET /api/patterns/identify` - Pattern identification
+- `GET /api/overlays/statistics` - Overlay statistics
+- `GET /api/registry/summary` - Resonance registry summary
+- `GET /api/overlays/query` - Query overlays by criteria
+- `POST /api/space/predict` - Space engine prediction
+- `POST /api/resonance/analyze` - Resonance engine analysis
 
-- **Light Speed**: 299,792.458 km/s
-- **Sun-Earth Distance**: 149,597,870.7 km (1 AU)
-- **Earth Radius**: 6,371 km
-- **Schumann Base Frequency**: 7.83 Hz
+Full API documentation available at `http://localhost:8000/docs` when running the server.
 
-### Calibration Factors
+## 🔬 Methodology
 
-- **80km Boundary Refraction**: 1.15
-- **85km Boundary Refraction**: 1.12
-- **Equatorial Enhancement**: 1.25
-- **Tetrahedral Angle (Volcanic)**: 54.74°
-- **Tetrahedral Angle (Seismic)**: 26.52°
+### Empirical Approach
 
-### 12D Space Variables
+- **Real Data Only**: Uses NASA OMNI2 and NOAA SWPC data
+- **No Approximations**: All calculations use validated formulas
+- **Fail Gracefully**: Returns errors when data unavailable
+- **Pattern Recognition**: Identifies common denominators from historical data
 
-1. Solar Activity
-2. Geomagnetic Field
-3. Planetary Alignment
-4. Cosmic Ray Intensity
-5. Solar Wind Pressure
-6. Ionospheric Density
-7. Magnetosphere Compression
-8. Auroral Activity
-9. Solar Flare Intensity
-10. Coronal Mass Ejection
-11. Interplanetary Magnetic Field
-12. Galactic Cosmic Radiation
+### Key Formulas
 
----
+**Wave Superposition**:
+```
+ψ(t) = Σᵢ Aᵢ * cos(2π * fᵢ * t + φᵢ)
+```
 
-## 🌐 Data Sources
+**Coherence Coefficient**:
+```
+C = |Σᵢ Aᵢ * e^(iφᵢ)| / Σᵢ Aᵢ
+```
 
-### NASA OMNI2 API
-- **Reliability**: 88%
-- **URL**: https://omniweb.gsfc.nasa.gov/
-- **Data**: Solar wind, magnetic field, particle flux
-- **Update Frequency**: Hourly
+**RGB Resonance**:
+```
+RGB = sqrt((R² + G² + B²) / 3.0)
+```
 
-### NOAA SWPC API
-- **Reliability**: 92%
-- **URL**: https://www.swpc.noaa.gov/
-- **Data**: Solar flares, geomagnetic indices, real-time space weather
-- **Update Frequency**: 1-minute to hourly
+**Strain-Rate Tensor**:
+```
+εᵢⱼ = 1/2 (∂vᵢ/∂xⱼ + ∂vⱼ/∂xᵢ)
+```
 
----
+## 🎨 Visualization Features
 
-## 📚 Usage Examples
+- **3D Wireframe**: Real-time resonance overlay visualization
+- **Color Coding**: 
+  - Red: Constructive interference
+  - Blue: Destructive interference
+  - Yellow: Mixed interference
+- **Time-Series Animation**: 24-step temporal evolution
+- **Prediction Charts**: Interactive 21-day forecast
+- **Analytics Dashboard**: Real-time statistics and metrics
 
-### Python API Usage
+## 🛠️ Configuration
 
+### Database
+
+Default: SQLite (`earthquake_enhanced.db`)
+
+For PostgreSQL:
 ```python
-from features.space_engine import SpaceEngine
-import asyncio
-from datetime import datetime
+from backend.models import DatabaseManager
 
-async def main():
-    engine = SpaceEngine()
-    
-    # Calculate prediction
-    result = await engine.calculate_space_prediction(
-        latitude=35.0,
-        longitude=140.0,
-        timestamp=datetime.utcnow()
-    )
-    
-    print(f"Correlation Score: {result['earthquake_correlation_score']}")
-    print(f"RGB Resonance: {result['rgb_resonance']['rgb_resonance']}")
-
-asyncio.run(main())
+db = DatabaseManager('postgresql://user:pass@localhost/earthquake_db')
 ```
 
-### cURL Examples
+### API Settings
 
-```bash
-# Get engine status
-curl http://localhost:8000/api/v1/status
+Edit `backend/api.py`:
+```python
+# Change port
+uvicorn.run(app, host="0.0.0.0", port=8080)
 
-# Calculate prediction
-curl -X POST http://localhost:8000/api/v1/prediction \
-  -H "Content-Type: application/json" \
-  -d '{
-    "latitude": 35.0,
-    "longitude": 140.0
-  }'
-
-# Get solar angles
-curl -X POST http://localhost:8000/api/v1/solar-angles \
-  -H "Content-Type: application/json" \
-  -d '{
-    "latitude": 35.0,
-    "longitude": 140.0
-  }'
+# CORS origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    ...
+)
 ```
 
----
+## 📝 Critical Constraints
 
-## 🛠️ Development
-
-### Adding New Features
-
-1. Extend `SpaceEngine` class in `backend/features/space_engine.py`
-2. Add corresponding tests in `backend/features/tests/test_space_engine.py`
-3. Create API endpoint in `backend/api.py`
-4. Update frontend if needed
-
-### Code Style
-
-- Follow PEP 8 guidelines
-- Use type hints
-- Document all public methods
-- Write unit tests for new features
-
----
+1. ✅ **Real Data Only**: No fabricated or estimated values
+2. ✅ **Empirical Calculations**: Validated formulas from physics
+3. ✅ **Graceful Failures**: Proper error handling when data unavailable
+4. ✅ **Pattern Recognition**: Focus on identifying common denominators
+5. ✅ **Comprehensive Testing**: All features have unit tests
 
 ## 🤝 Contributing
 
@@ -344,44 +378,36 @@ curl -X POST http://localhost:8000/api/v1/solar-angles \
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
----
-
-## 📝 License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🔗 Links
-
-- **GitHub**: https://github.com/nbbulk-dotcom/Earthquake_Enhanced
-- **Documentation**: `/docs`
-- **API Docs**: http://localhost:8000/docs
-- **Issues**: https://github.com/nbbulk-dotcom/Earthquake_Enhanced/issues
-
----
-
-## 📧 Contact
-
-For questions or support, please open an issue on GitHub.
-
----
 
 ## 🙏 Acknowledgments
 
 - NASA OMNI2 for space weather data
-- NOAA SWPC for real-time space weather
-- Original BRETT system algorithms
-- Extracted code from GEO_EARTH, QuakePredictionTestSystem, and EarthQuake_historical_Test repositories
+- NOAA SWPC for real-time space data
+- BRETT System architecture
+- Open-source community
 
----
+## 📞 Support
 
-## ⚠️ Disclaimer
+- **Issues**: [GitHub Issues](https://github.com/nbbulk-dotcom/Earthquake_Enhanced/issues)
+- **Documentation**: [Full Docs](docs/TECHNICAL.md)
+- **API Docs**: http://localhost:8000/docs (when running)
 
-This system is for research and educational purposes. Earthquake prediction is inherently uncertain. This tool should not be used as the sole basis for safety decisions. Always follow official guidance from geological and emergency management authorities.
+## 🔮 Future Enhancements
+
+- [ ] Real-time data streaming from NASA/NOAA
+- [ ] Machine learning pattern classification
+- [ ] Mobile app for visualization
+- [ ] Integration with seismic databases
+- [ ] Historical earthquake correlation analysis
+- [ ] Expanded tectonic plate boundary database
 
 ---
 
 **Version**: 1.0.0  
-**Last Updated**: October 2024  
-**Status**: ✅ Operational
+**Built with**: Python, FastAPI, Three.js, SQLAlchemy  
+**System**: BRETT Multi-Resonance Correlation Engine
+
+🌍 **Making earthquake prediction through resonance pattern recognition**

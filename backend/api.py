@@ -1,352 +1,283 @@
 """
-FastAPI Application for Earthquake_Enhanced Space Engine
-
-Provides REST API endpoints for space weather correlation and earthquake prediction
+FastAPI Backend for Earthquake Enhanced System
+Provides REST API endpoints for correlation engine
 """
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from typing import List, Optional, Tuple
 from datetime import datetime
-from typing import Optional, Dict, Any
-import logging
+import asyncio
+import hashlib
 
-from features.space_engine import SpaceEngine, get_space_engine
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Import our engines
+from backend.features.correlation_engine import CorrelationEngine, get_correlation_engine
+from backend.features.space_engine import SpaceEngine, get_space_engine
+from backend.features.resonance import ResonanceEngine, get_resonance_engine
+from backend.models import get_database_manager
 
 # Create FastAPI app
 app = FastAPI(
-    title="Earthquake Enhanced - Space Engine API",
-    description="Space weather correlation engine for earthquake prediction",
+    title="Earthquake Enhanced API",
+    description="Multi-Resonance Overlay Analysis System",
     version="1.0.0"
 )
 
-# Add CORS middleware
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify allowed origins
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Initialize Space Engine
+# Global engine instances
+correlation_engine = get_correlation_engine()
 space_engine = get_space_engine()
+resonance_engine = get_resonance_engine()
+db_manager = get_database_manager()
 
+# Request models
+class SinglePointRequest(BaseModel):
+    latitude: float
+    longitude: float
+    depth_km: float = 15.0
 
-# Request/Response Models
+class MultiFaultRequest(BaseModel):
+    center_lat: float
+    center_lon: float
+    triangulation_points: List[Tuple[float, float]]
+    depth_km: float = 15.0
+
 class PredictionRequest(BaseModel):
-    latitude: float = Field(..., ge=-90, le=90, description="Geographic latitude")
-    longitude: float = Field(..., ge=-180, le=180, description="Geographic longitude")
-    timestamp: Optional[str] = Field(None, description="ISO format timestamp (default: now)")
-    include_historical: bool = Field(False, description="Include historical data analysis")
+    latitude: float
+    longitude: float
+    depth_km: float = 15.0
 
-
-class SolarAngleRequest(BaseModel):
-    latitude: float = Field(..., ge=-90, le=90)
-    longitude: float = Field(..., ge=-180, le=180)
-    timestamp: Optional[str] = None
-
-
-class LagTimeRequest(BaseModel):
-    latitude: float = Field(..., ge=-90, le=90)
-    longitude: float = Field(..., ge=-180, le=180)
-    timestamp: Optional[str] = None
-
-
-class RGBResonanceRequest(BaseModel):
-    space_readings: Dict[str, float]
-
-
-# API Endpoints
-
+# Root endpoint
 @app.get("/")
 async def root():
-    """Root endpoint with API information"""
     return {
-        "name": "Earthquake Enhanced - Space Engine API",
+        "message": "Earthquake Enhanced System API",
         "version": "1.0.0",
-        "status": "operational",
         "endpoints": {
-            "prediction": "/api/v1/prediction",
-            "solar_angles": "/api/v1/solar-angles",
-            "lag_times": "/api/v1/lag-times",
-            "rgb_resonance": "/api/v1/rgb-resonance",
-            "sun_path": "/api/v1/sun-path",
-            "engine_status": "/api/v1/status"
-        },
-        "documentation": "/docs"
+            "analyze_single": "/api/analyze/single",
+            "analyze_multi_fault": "/api/analyze/multi-fault",
+            "predict_21day": "/api/predict/21-day",
+            "identify_patterns": "/api/patterns/identify",
+            "overlay_statistics": "/api/overlays/statistics",
+            "registry_summary": "/api/registry/summary",
+            "engine_status": "/api/status"
+        }
     }
 
+# Status endpoint
+@app.get("/api/status")
+async def get_status():
+    """Get system status"""
+    return {
+        "correlation_engine": correlation_engine.get_engine_status(),
+        "space_engine": space_engine.get_engine_status(),
+        "resonance_engine": resonance_engine.get_engine_status()
+    }
 
-@app.get("/api/v1/status")
-async def get_engine_status():
-    """Get space engine status and configuration"""
-    try:
-        status = space_engine.get_engine_status()
-        return {
-            "success": True,
-            "status": status
-        }
-    except Exception as e:
-        logger.error(f"Status check failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.post("/api/v1/prediction")
-async def calculate_prediction(request: PredictionRequest):
+# Single-point analysis
+@app.post("/api/analyze/single")
+async def analyze_single_point(request: SinglePointRequest):
     """
-    Calculate comprehensive space engine prediction
-    
-    Returns earthquake correlation analysis based on space weather data
+    Analyze resonances at a single geographic point
     """
     try:
-        # Parse timestamp
-        if request.timestamp:
-            timestamp = datetime.fromisoformat(request.timestamp.replace('Z', '+00:00'))
-        else:
-            timestamp = datetime.utcnow()
-        
-        # Calculate prediction
-        result = await space_engine.calculate_space_prediction(
-            latitude=request.latitude,
-            longitude=request.longitude,
-            timestamp=timestamp,
-            include_historical=request.include_historical
-        )
-        
-        return result
-        
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=f"Invalid input: {str(e)}")
-    except Exception as e:
-        logger.error(f"Prediction failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.post("/api/v1/solar-angles")
-async def calculate_solar_angles(request: SolarAngleRequest):
-    """
-    Calculate solar elevation and angles
-    
-    Returns solar position information using spherical trigonometry
-    """
-    try:
-        timestamp = (datetime.fromisoformat(request.timestamp.replace('Z', '+00:00'))
-                    if request.timestamp else datetime.utcnow())
-        
-        solar_angles = space_engine.calculate_solar_elevation(
+        result = await correlation_engine.analyze_single_point(
             request.latitude,
             request.longitude,
-            timestamp
+            request.depth_km
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Multi-fault analysis
+@app.post("/api/analyze/multi-fault")
+async def analyze_multi_fault(request: MultiFaultRequest):
+    """
+    Analyze multi-fault region with triangulation points
+    """
+    try:
+        result = await correlation_engine.analyze_multi_fault_region(
+            request.center_lat,
+            request.center_lon,
+            request.triangulation_points,
+            request.depth_km
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# 21-day prediction
+@app.post("/api/predict/21-day")
+async def predict_21_days(request: PredictionRequest):
+    """
+    Generate 21-day forward prediction
+    """
+    try:
+        result = await correlation_engine.generate_21day_prediction(
+            request.latitude,
+            request.longitude,
+            request.depth_km
         )
         
-        magnetic_lat = space_engine.calculate_magnetic_latitude(
+        # Save to database
+        prediction_id = hashlib.md5(
+            f"{request.latitude}_{request.longitude}_{datetime.utcnow().isoformat()}".encode()
+        ).hexdigest()[:16]
+        
+        try:
+            db_manager.save_prediction(result, prediction_id)
+        except Exception as db_error:
+            print(f"Warning: Failed to save prediction to database: {db_error}")
+        
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Pattern identification
+@app.get("/api/patterns/identify")
+async def identify_patterns(time_window_days: int = 30):
+    """
+    Identify recurring resonance patterns
+    """
+    try:
+        patterns = correlation_engine.identify_recurring_patterns(time_window_days)
+        return {
+            "patterns": [
+                {
+                    "pattern_id": p.pattern_id,
+                    "pattern_name": p.pattern_name,
+                    "frequency_signature": p.frequency_signature,
+                    "recurrence_period": p.recurrence_period,
+                    "similarity_score": p.similarity_score,
+                    "first_observed": p.first_observed.isoformat(),
+                    "last_observed": p.last_observed.isoformat(),
+                    "occurrence_count": p.occurrence_count,
+                    "temporal_evolution": p.temporal_evolution
+                }
+                for p in patterns
+            ],
+            "total_patterns": len(patterns)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Overlay statistics
+@app.get("/api/overlays/statistics")
+async def get_overlay_statistics(
+    latitude: Optional[float] = None,
+    longitude: Optional[float] = None,
+    radius_km: Optional[float] = None
+):
+    """
+    Get overlay region statistics
+    """
+    try:
+        location = (latitude, longitude) if latitude and longitude else None
+        stats = correlation_engine.get_overlay_statistics(location, radius_km)
+        return stats
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Resonance registry
+@app.get("/api/registry/summary")
+async def get_registry_summary():
+    """
+    Get resonance source registry summary
+    """
+    try:
+        summary = correlation_engine.get_resonance_registry_summary()
+        return summary
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Query overlays
+@app.get("/api/overlays/query")
+async def query_overlays(
+    min_overlay_count: Optional[int] = None,
+    min_coherence: Optional[float] = None,
+    interference_type: Optional[str] = None,
+    time_window_hours: Optional[int] = None
+):
+    """
+    Query overlay regions by criteria
+    """
+    try:
+        regions = correlation_engine.query_overlays_by_criteria(
+            min_overlay_count,
+            min_coherence,
+            interference_type,
+            time_window_hours
+        )
+        
+        return {
+            "regions": [
+                {
+                    "region_id": r.region_id,
+                    "location": r.location,
+                    "resultant_frequency": r.resultant_frequency,
+                    "resultant_amplitude": r.resultant_amplitude,
+                    "interference_type": r.interference_type,
+                    "coherence_coefficient": r.coherence_coefficient,
+                    "overlay_count": r.overlay_count,
+                    "timestamp": r.timestamp.isoformat()
+                }
+                for r in regions
+            ],
+            "total": len(regions)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Space engine prediction (direct)
+@app.post("/api/space/predict")
+async def space_prediction(request: SinglePointRequest):
+    """
+    Get space engine prediction directly
+    """
+    try:
+        result = await space_engine.calculate_space_prediction(
             request.latitude,
             request.longitude
         )
-        
-        tetrahedral_seismic = space_engine.calculate_tetrahedral_angle(
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Resonance engine analysis (direct)
+@app.post("/api/resonance/analyze")
+async def resonance_analysis(request: SinglePointRequest):
+    """
+    Get resonance engine analysis directly
+    """
+    try:
+        result = resonance_engine.calculate_comprehensive_resonance(
             request.latitude,
             request.longitude,
-            'seismic'
+            request.depth_km
         )
-        
-        tetrahedral_volcanic = space_engine.calculate_tetrahedral_angle(
-            request.latitude,
-            request.longitude,
-            'volcanic'
-        )
-        
-        return {
-            "success": True,
-            "timestamp": timestamp.isoformat(),
-            "location": {
-                "latitude": request.latitude,
-                "longitude": request.longitude,
-                "magnetic_latitude": magnetic_lat
-            },
-            "solar_angles": solar_angles,
-            "tetrahedral_angles": {
-                "seismic": tetrahedral_seismic,
-                "volcanic": tetrahedral_volcanic
-            }
-        }
-        
+        return result
     except Exception as e:
-        logger.error(f"Solar angle calculation failed: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
-@app.post("/api/v1/lag-times")
-async def calculate_lag_times(request: LagTimeRequest):
-    """
-    Calculate dynamic lag times for space-to-Earth effects
-    
-    Returns physics-based lag time calculations
-    """
+# Initialize database on startup
+@app.on_event("startup")
+async def startup_event():
+    """Initialize database tables on startup"""
     try:
-        timestamp = (datetime.fromisoformat(request.timestamp.replace('Z', '+00:00'))
-                    if request.timestamp else datetime.utcnow())
-        
-        lag_times = space_engine.calculate_dynamic_lag_times(
-            request.latitude,
-            request.longitude,
-            timestamp
-        )
-        
-        return {
-            "success": True,
-            "timestamp": timestamp.isoformat(),
-            "location": {
-                "latitude": request.latitude,
-                "longitude": request.longitude
-            },
-            "lag_times": lag_times
-        }
-        
+        db_manager.create_all_tables()
+        print("Database tables initialized successfully")
     except Exception as e:
-        logger.error(f"Lag time calculation failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.post("/api/v1/rgb-resonance")
-async def calculate_rgb_resonance(request: RGBResonanceRequest):
-    """
-    Calculate RGB resonance from space variable readings
-    
-    Formula: sqrt((R² + G² + B²) / 3.0)
-    """
-    try:
-        rgb_result = space_engine.calculate_rgb_resonance(request.space_readings)
-        
-        return {
-            "success": True,
-            "rgb_resonance": rgb_result
-        }
-        
-    except Exception as e:
-        logger.error(f"RGB resonance calculation failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.get("/api/v1/sun-path")
-async def predict_sun_path(
-    latitude: float = Query(..., ge=-90, le=90),
-    longitude: float = Query(..., ge=-180, le=180),
-    hours_ahead: int = Query(24, ge=1, le=168),
-    timestamp: Optional[str] = Query(None)
-):
-    """
-    Predict sun path over specified time period
-    
-    Returns sun position predictions at hourly intervals
-    """
-    try:
-        ts = (datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
-              if timestamp else datetime.utcnow())
-        
-        sun_path = space_engine.predict_sun_path(
-            latitude,
-            longitude,
-            ts,
-            hours_ahead
-        )
-        
-        return {
-            "success": True,
-            "start_time": ts.isoformat(),
-            "location": {
-                "latitude": latitude,
-                "longitude": longitude
-            },
-            "hours_predicted": hours_ahead,
-            "sun_path": sun_path
-        }
-        
-    except Exception as e:
-        logger.error(f"Sun path prediction failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.get("/api/v1/atmospheric-boundary")
-async def get_atmospheric_boundary_factors():
-    """
-    Get atmospheric boundary refraction factors
-    
-    Returns 80km and 85km boundary calibration factors
-    """
-    try:
-        factors = space_engine.get_boundary_refraction_factors()
-        
-        return {
-            "success": True,
-            "boundary_factors": factors,
-            "description": {
-                "80km_boundary": "Refraction factor for 80km atmospheric boundary (1.15)",
-                "85km_boundary": "Refraction factor for 85km atmospheric boundary (1.12)",
-                "average_boundary": "Average refraction factor"
-            }
-        }
-        
-    except Exception as e:
-        logger.error(f"Boundary factors retrieval failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.get("/api/v1/equatorial-enhancement")
-async def calculate_equatorial_enhancement(
-    latitude: float = Query(..., ge=-90, le=90),
-    base_value: float = Query(1.0, ge=0)
-):
-    """
-    Calculate equatorial enhancement factor
-    
-    Applies 1.25 enhancement for equatorial regions (±23.5°)
-    """
-    try:
-        result = space_engine.apply_equatorial_enhancement(latitude, base_value)
-        
-        return {
-            "success": True,
-            "enhancement": result
-        }
-        
-    except Exception as e:
-        logger.error(f"Equatorial enhancement calculation failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.get("/health")
-async def health_check():
-    """Health check endpoint"""
-    return {
-        "status": "healthy",
-        "timestamp": datetime.utcnow().isoformat()
-    }
-
-
-# Error handlers
-@app.exception_handler(404)
-async def not_found_handler(request, exc):
-    return {
-        "error": "Not Found",
-        "message": "The requested endpoint does not exist",
-        "path": str(request.url)
-    }
-
-
-@app.exception_handler(500)
-async def internal_error_handler(request, exc):
-    logger.error(f"Internal error: {str(exc)}")
-    return {
-        "error": "Internal Server Error",
-        "message": "An unexpected error occurred"
-    }
-
+        print(f"Warning: Database initialization failed: {e}")
 
 if __name__ == "__main__":
     import uvicorn

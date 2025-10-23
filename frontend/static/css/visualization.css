@@ -1,0 +1,149 @@
+
+/* Additional styles for 3D visualization */
+
+#overlay3D {
+    position: relative;
+    cursor: grab;
+}
+
+#overlay3D:active {
+    cursor: grabbing;
+}
+
+/* Resonance source markers */
+.resonance-marker {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.marker-space {
+    background: rgba(255, 0, 0, 0.7);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+.marker-strain {
+    background: rgba(0, 255, 0, 0.7);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.marker-custom {
+    background: rgba(0, 0, 255, 0.7);
+    box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+}
+
+/* Amplification zones */
+.amplification-zone {
+    fill: rgba(255, 0, 0, 0.3);
+    stroke: #ff0000;
+    stroke-width: 2;
+}
+
+/* Cancellation zones */
+.cancellation-zone {
+    fill: rgba(0, 0, 255, 0.3);
+    stroke: #0000ff;
+    stroke-width: 2;
+}
+
+/* Pattern display */
+.pattern-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.pattern-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.pattern-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.pattern-name {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.pattern-score {
+    background: var(--light-bg);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+}
+
+.pattern-details {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Prediction summary */
+.prediction-summary {
+    background: var(--light-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.summary-item {
+    text-align: center;
+}
+
+.summary-label {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* 3D Scene Legend */
+.scene-legend {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+}
+
+.legend-label {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
