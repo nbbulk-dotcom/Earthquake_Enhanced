@@ -1,0 +1,101 @@
+
+<!-- File: frontend/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earthquake Enhanced UI</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        section { margin-bottom: 20px; border: 1px solid #ddd; padding: 10px; }
+        button { margin-top: 10px; }
+        pre { background: #f4f4f4; padding: 10px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>Earthquake Enhanced System</h1>
+    <p>Use the forms below to call API endpoints. Responses shown in JSON.</p>
+
+    <section>
+        <h2>Analyze Single Point</h2>
+        <form id="single-form">
+            <label>Latitude: <input type="number" name="latitude" value="35.6895" step="0.0001" required></label><br>
+            <label>Longitude: <input type="number" name="longitude" value="139.6917" step="0.0001" required></label><br>
+            <label>Depth (km): <input type="number" name="depth_km" value="15" step="0.1"></label><br>
+            <button type="submit">Analyze</button>
+        </form>
+        <pre id="single-result"></pre>
+    </section>
+
+    <section>
+        <h2>Analyze Multi-Fault Region</h2>
+        <form id="multi-form">
+            <label>Center Lat: <input type="number" name="center_lat" value="35.6895" step="0.0001" required></label><br>
+            <label>Center Lon: <input type="number" name="center_lon" value="139.6917" step="0.0001" required></label><br>
+            <label>Triangulation Points (JSON array of [lat,lon] pairs): <textarea name="triangulation_points" rows="3">[[35.7,139.7],[35.6,139.6],[35.8,139.8]]</textarea></label><br>
+            <label>Depth (km): <input type="number" name="depth_km" value="15" step="0.1"></label><br>
+            <button type="submit">Analyze</button>
+        </form>
+        <pre id="multi-result"></pre>
+    </section>
+
+    <section>
+        <h2>21-Day Prediction</h2>
+        <form id="predict-form">
+            <label>Latitude: <input type="number" name="latitude" value="35.6895" step="0.0001" required></label><br>
+            <label>Longitude: <input type="number" name="longitude" value="139.6917" step="0.0001" required></label><br>
+            <label>Depth (km): <input type="number" name="depth_km" value="15" step="0.1"></label><br>
+            <button type="submit">Predict</button>
+        </form>
+        <pre id="predict-result"></pre>
+    </section>
+
+    <!-- Add similar sections for other endpoints: identify_patterns, overlay_statistics, registry_summary, overlays/query, space/predict, resonance/analyze -->
+
+    <section>
+        <h2>Get Status</h2>
+        <button id="status-btn">Get Status</button>
+        <pre id="status-result"></pre>
+    </section>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        function handleForm(formId, endpoint, resultId) {
+            document.getElementById(formId).addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                if (data.triangulation_points) data.triangulation_points = JSON.parse(data.triangulation_points);
+                try {
+                    const res = await fetch(`${API_BASE}${endpoint}`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(data)
+                    });
+                    const json = await res.json();
+                    document.getElementById(resultId).textContent = JSON.stringify(json, null, 2);
+                } catch (err) {
+                    document.getElementById(resultId).textContent = 'Error: ' + err.message;
+                }
+            });
+        }
+
+        handleForm('single-form', '/api/analyze/single', 'single-result');
+        handleForm('multi-form', '/api/analyze/multi-fault', 'multi-result');
+        handleForm('predict-form', '/api/predict/21-day', 'predict-result');
+
+        document.getElementById('status-btn').addEventListener('click', async () => {
+            try {
+                const res = await fetch(`${API_BASE}/api/status`);
+                const json = await res.json();
+                document.getElementById('status-result').textContent = JSON.stringify(json, null, 2);
+            } catch (err) {
+                document.getElementById('status-result').textContent = 'Error: ' + err.message;
+            }
+        });
+    </script>
+</body>
+</html>
