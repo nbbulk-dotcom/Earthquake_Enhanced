@@ -18,13 +18,13 @@ class CorrelationEngine:
     def get_engine_status(self):
         return {"status": "stub - healthy"}
 
-    async def analyze_single_point(self, lat: float, lon: float, depth: float):
+    def analyze_single_point(self, lat: float, lon: float, depth: float):
         return {"analysis": "stub single point result"}
 
-    async def analyze_multi_fault_region(self, center_lat: float, center_lon: float, points: List[Tuple[float, float]], depth: float):
+    def analyze_multi_fault_region(self, center_lat: float, center_lon: float, points: List[Tuple[float, float]], depth: float):
         return {"analysis": "stub multi fault result"}
 
-    async def generate_21day_prediction(self, lat: float, lon: float, depth: float):
+    def generate_21day_prediction(self, lat: float, lon: float, depth: float):
         return {"prediction": "stub 21-day result"}
 
     def identify_recurring_patterns(self, days: int):
@@ -43,7 +43,7 @@ class SpaceEngine:
     def get_engine_status(self):
         return {"status": "stub - healthy"}
 
-    async def calculate_space_prediction(self, lat: float, lon: float):
+    def calculate_space_prediction(self, lat: float, lon: float):
         return {"space_prediction": "stub"}
 
 class ResonanceEngine:
