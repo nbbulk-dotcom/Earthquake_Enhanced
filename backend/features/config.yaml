@@ -1,86 +1,14 @@
-# Feature Configuration
 
-version: "2.0.0"
-description: "Feature extraction configuration for deterministic measurement system"
-
-# Note: This system does NOT use features for ML prediction
-# Features are only for descriptive analysis and visualization
-
-spatial_features:
-  - name: "epicenter_density"
-    description: "Number of earthquakes per unit area"
-    unit: "events/km²"
-  
-  - name: "depth_distribution"
-    description: "Distribution of earthquake depths"
-    unit: "km"
-  
-  - name: "magnitude_distribution"
-    description: "Distribution of magnitudes"
-    unit: "Mw"
-
-temporal_features:
-  - name: "event_rate"
-    description: "Number of events per unit time"
-    unit: "events/day"
-  
-  - name: "cumulative_moment"
-    description: "Cumulative seismic moment over time"
-    unit: "N⋅m"
-
-physical_features:
-  - name: "strain_rate"
-    description: "Kostrov strain rate"
-    unit: "per year"
-    formula: "ΣM₀ / (2μVT)"
-  
-  - name: "seismic_moment"
-    description: "Total seismic moment"
-    unit: "N⋅m"
-    formula: "10^(1.5×Mw + 9.1)"
-
-# These are NOT used for prediction
-# Only for descriptive statistics and visualization
-
-# Resonance Analysis Configuration
+# backend/features/config.yaml
+bands:
+  - [0.001, 0.1]
+  - [0.1, 1.0]
+  - [1.0, 10.0]
+vs_by_band_km_s:
+  - 3.5
+  - 3.5
+  - 3.5
 resonance:
-  description: "Frequency-domain modal spectral analysis for crustal resonance detection"
-  
-  # Frequency bands for multi-scale analysis (Hz)
-  # Format: [[f_min, f_max], ...]
-  frequency_bands:
-    - [0.001, 0.1]    # Very low frequency: regional crustal modes
-    - [0.1, 1.0]      # Low frequency: basin resonances, large-scale features
-    - [1.0, 10.0]     # Medium frequency: local site effects, smaller structures
-  
-  # Shear wave velocity (km/s) by frequency band
-  # Used for geometry-based resonance estimates
-  # Index corresponds to frequency_bands above
-  vs_by_band_km_s:
-    - 3.5  # Lower crust / upper mantle (low freq)
-    - 3.5  # Mid-crust (medium freq)
-    - 3.5  # Upper crust (high freq)
-  
-  # Spectral analysis parameters
-  spectral:
-    nperseg: 256              # FFT segment length (must be power of 2)
-    overlap_fraction: 0.5     # Overlap as fraction of nperseg
-    window: 'hann'            # Window function: 'hann', 'hamming', 'blackman'
-    detrend: 'constant'       # Detrending: 'constant', 'linear', false
-  
-  # Peak detection thresholds
-  peak_detection:
-    threshold_factor: 0.5     # Minimum relative amplitude (0-1)
-    min_peak_distance: 5      # Minimum frequency bins between peaks
-    half_power_ratio: 0.7071  # For Q-factor calculation (1/sqrt(2))
-  
-  # Geometry-based estimation
-  geometry:
-    factor: 0.5               # L = factor * sqrt(area)
-    default_vs_km_s: 3.5      # Default Vs if not specified by band
-  
-  # Quality thresholds for alert generation
-  quality_thresholds:
-    min_q_factor: 5.0         # Minimum Q for reliable resonance
-    min_amplitude: 0.1        # Minimum eigenvalue amplitude
-    max_geom_error: 2.0       # Max ratio: f_peak / f_geom for validation
+  nperseg: 256
+  min_energy_threshold: 1e-8
+  mode_factor: 2.0
