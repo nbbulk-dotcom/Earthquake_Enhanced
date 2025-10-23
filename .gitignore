@@ -66,3 +66,6 @@ tmp/
 
 # External Service Outputs
 .external_service_outputs/
+
+# Note: Test data in data/ directory IS tracked and committed
+# This ensures reproducibility and allows external evaluation

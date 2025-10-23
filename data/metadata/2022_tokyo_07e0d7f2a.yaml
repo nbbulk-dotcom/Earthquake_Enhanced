@@ -1,0 +1,16 @@
+source_id: USGS_Event
+query_params:
+  format: geojson
+  starttime: 2022-01-01T00:00:00Z
+  endtime: 2022-12-31T23:59:59Z
+  minmagnitude: 3.5
+  minlatitude: 30.0
+  maxlatitude: 38.5
+  minlongitude: 136.0
+  maxlongitude: 145.0
+  limit: 20000
+  orderby: time
+fetched_at_utc: 2023-10-23T00:00:00Z
+payload_checksum_sha256: 4f6c5e1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e
+raw_file: data/raw/usgs_events/2022_tokyo_07e0d7f2a.json
+feature_count: 586

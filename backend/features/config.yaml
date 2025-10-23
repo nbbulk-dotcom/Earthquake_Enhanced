@@ -1,0 +1,103 @@
+# Earthquake Enhanced System Configuration
+
+# Resonance Detection Parameters
+resonance:
+  # Frequency analysis
+  sampling_rate: 1.0  # Hz (1 sample per day for daily data)
+  window_size: 90  # days for spectral analysis
+  
+  # Threshold for resonance detection
+  amplitude_threshold: 0.5
+  frequency_threshold: 0.1  # cycles/day
+  
+  # Tokyo-specific parameters
+  tokyo:
+    target_lat: 35.6762
+    target_lon: 139.6503
+    search_radius_km: 150
+
+# Triangle Feature Configuration
+triangulation:
+  # Minimum magnitude for triangle vertices
+  min_magnitude: 3.5
+  
+  # Time window for triangle formation (days)
+  time_window: 30
+  
+  # Spatial constraints
+  max_distance_km: 500
+  min_distance_km: 10
+  
+  # Triangle quality metrics
+  min_area_km2: 100
+  max_aspect_ratio: 10
+
+# Feature Engineering
+features:
+  temporal_windows: [7, 14, 30, 90]
+  magnitude_thresholds: [3.5, 4.0, 4.5, 5.0, 5.5]
+  
+  # Empirical features
+  empirical:
+    enable_seismic_moment: true
+    enable_distance_features: true
+    enable_clustering: true
+    enable_resonance: true
+    enable_triangulation: true
+
+# Model Configuration
+models:
+  logistic_regression:
+    class_weight: balanced
+    max_iter: 1000
+    random_state: 42
+  
+  lightgbm:
+    n_estimators: 100
+    learning_rate: 0.05
+    max_depth: 6
+    random_state: 42
+    use_scale_pos_weight: true
+
+# Experiment Settings
+experiment:
+  train_test_split: 0.8
+  prediction_horizons: [7, 14, 30]
+  magnitude_threshold: 5.0  # For labeling significant events
+  
+  # Evaluation metrics
+  metrics:
+    - precision
+    - recall
+    - f1_score
+    - roc_auc
+    - brier_score
+
+# Data Sources
+data:
+  usgs_api:
+    base_url: "https://earthquake.usgs.gov/fdsnws/event/1/query"
+    format: geojson
+    timeout: 30
+  
+  # Data quality
+  quality:
+    min_events_per_window: 10
+    max_missing_days: 5
+    require_magnitude: true
+    require_location: true
+
+# Paths
+paths:
+  raw_data: "data/raw/usgs_events"
+  metadata: "data/metadata"
+  processed: "data/processed"
+  artifacts: "artifacts"
+  models: "models"
+  logs: "logs"
+
+# Logging
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/earthquake_enhanced.log"

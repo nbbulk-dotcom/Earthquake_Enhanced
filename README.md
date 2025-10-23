@@ -1,376 +1,410 @@
-# 🌍 Earthquake Enhanced System
+# Earthquake Enhanced System (GEO_EARTH / BRETT)
 
-[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-20/20-success.svg)](backend/features/tests/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 
-A comprehensive multi-resonance overlay analysis system for earthquake prediction using space weather correlation and strain-rate resonance analysis.
+## 🌍 Overview
 
-## 🎯 Core Principle
+The **Earthquake Enhanced System** (also known as **GEO_EARTH** or **BRETT**) is a comprehensive, physics-informed earthquake prediction and analysis platform. This system implements advanced seismological analysis techniques, empirical feature engineering, and machine learning models to predict earthquake activity with multi-horizon forecasting capabilities.
 
-**"The earth reacts to resonance"** - This system identifies common denominators through pattern recognition from historical data using multiple resonance sources.
+### Key Features
 
-## ✨ Features
+- **Multi-Horizon Prediction**: 7-day, 14-day, and 30-day earthquake forecasting
+- **Empirical Feature Engineering**: Physics-based features including seismic moment, distance metrics, and resonance analysis
+- **Class-Weighted Models**: Handles severe class imbalance in earthquake prediction
+- **Comprehensive Testing**: Full test coverage for all modules
+- **Real USGS Data**: Uses actual earthquake data from USGS API
+- **Reproducible Pipeline**: Complete data lineage from raw data to predictions
 
-### Correlation Engine (8 Core Features)
+## 📋 Table of Contents
 
-1. **Multi-Resonance Overlay Analysis**
-   - Integrates space engine resonances (RGB, solar, geomagnetic, ionospheric)
-   - Integrates strain-rate resonances
-   - Supports custom resonance sources
-   - Tracks and names each resonance set with unique identifiers
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Data Format](#data-format)
+- [Running Experiments](#running-experiments)
+- [Running Tests](#running-tests)
+- [Key Components](#key-components)
+- [Configuration](#configuration)
+- [Results and Artifacts](#results-and-artifacts)
+- [For External AI Evaluation](#for-external-ai-evaluation)
+- [Contributing](#contributing)
+- [License](#license)
 
-2. **Resultant Frequency Calculation**
-   - Wave superposition using empirical formulas: `ψ(t) = Σᵢ Aᵢ * cos(2π * fᵢ * t + φᵢ)`
-   - Constructive and destructive interference detection
-   - Amplitude changes in overlap zones
-   - Beat frequency detection
-
-3. **Coherence and Amplification Detection**
-   - Phase alignment detection using coherence coefficient: `|Σᵢ Aᵢ * e^(iφᵢ)| / Σᵢ Aᵢ`
-   - Amplification zone identification (constructive interference)
-   - Cancellation zone identification (destructive interference)
-   - Quality factors (Q) for resonance peaks
-
-4. **Pattern Identification**
-   - Recurring resonance patterns across multiple sources
-   - Temporal evolution tracking
-   - Pattern similarity metrics using normalized cross-correlation
-   - Pattern matching for prediction
-
-5. **21-Day Forward Prediction**
-   - Future resonance calculations from current day
-   - Sun path prediction for future space resonances
-   - Confidence intervals based on data reliability
-   - Risk scoring with time decay
-
-6. **Geolocated Point Analysis**
-   - Single-point analysis for specific locations
-   - Multi-fault regions with triangulation points
-   - Regional aggregation for multi-point analysis
-   - Distance-based amplitude attenuation
-
-7. **Resonance Set Tracking**
-   - Registry of all active resonance sources
-   - Overlay counting at any time/location
-   - Summary statistics (max overlays, dominant frequencies)
-   - Query by location, time, or resonance type
-
-8. **Data Preparation for Visualization**
-   - 3D wireframe visualization data
-   - Color coding for different resonance sources
-   - Time-series animation data
-   - Real-time updates
-
-### Space Engine (8 Core Features)
-
-1. **85km/80km Atmospheric Boundary Refraction**
-   - Calibration factors: 1.12 (85km), 1.15 (80km)
-   - Linear interpolation between boundaries
-
-2. **Angle of Incidence Tracking**
-   - Solar elevation using spherical trigonometry
-   - Tetrahedral angles (volcanic: 54.74°, seismic: 26.52°)
-   - Magnetic latitude conversion
-
-3. **Sun Path Prediction**
-   - 24-hour sun path prediction
-   - Ray path geometry calculations
-   - Stationary Earth reference frame
-
-4. **Dynamic Lag Time Calculation**
-   - Physics-based transmission delays
-   - Solar lag: 4-12 hours (seasonal variation)
-   - Geomagnetic lag: 4-8 hours (diurnal variation)
-   - Ionospheric lag: 1-7 hours (semi-diurnal)
-
-5. **RGB Resonance Calculations**
-   - R (Red): Solar wind, flares, CME
-   - G (Green): Magnetic fields, geomagnetic, magnetosphere
-   - B (Blue): Cosmic rays, ionospheric, atmospheric
-   - Formula: `sqrt((R² + G² + B²) / 3.0)`
-
-6. **Data Integration**
-   - NASA OMNI2 API (88% reliability)
-   - NOAA SWPC API (92% reliability)
-   - Real-time space weather data
-   - Graceful fallback when unavailable
-
-7. **Resultant Resonance Calculations**
-   - 12D correlation matrix for space variables
-   - Eigenvalue analysis for dominant modes
-   - Cross-correlation between variables
-   - Spatial and temporal factors
-
-8. **Equatorial Enhancement**
-   - 1.25 enhancement factor for equatorial regions (±23.5°)
-   - Tapered enhancement based on distance from equator
-
-### Resonance Engine
-
-- **Strain-Rate Tensor Calculations**: `εᵢⱼ = 1/2 (∂vᵢ/∂xⱼ + ∂vⱼ/∂xᵢ)`
-- **Crustal Stress Resonance**: Tectonic plate boundary analysis
-- **Harmonic Frequency Detection**: Spectral peak identification
-- **Seismic Wave Propagation**: P-wave and S-wave travel times
-- **Quality Factor (Q)**: Resonance peak sharpness
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.11+
-- pip
-- Git
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/nbbulk-dotcom/Earthquake_Enhanced.git
-cd Earthquake_Enhanced
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Initialize database
-python -c "from backend.models import get_database_manager; get_database_manager().create_all_tables()"
-```
-
-### Running the System
-
-#### Start Backend API
-
-```bash
-# From project root
-python backend/api.py
-
-# API will be available at http://localhost:8000
-# Interactive docs at http://localhost:8000/docs
-```
-
-#### Open Frontend
-
-```bash
-# Open in browser
-open frontend/templates/visualization.html
-# Or navigate to: file:///path/to/Earthquake_Enhanced/frontend/templates/visualization.html
-```
-
-## 📊 Usage Examples
-
-### Python API
-
-```python
-import asyncio
-from backend.features.correlation_engine import get_correlation_engine
-
-# Initialize engine
-engine = get_correlation_engine()
-
-# Single-point analysis
-async def analyze():
-    result = await engine.analyze_single_point(
-        latitude=35.6762,   # Tokyo
-        longitude=139.6503,
-        depth_km=15.0
-    )
-    print(f"Overlay Count: {result['overlay_region']['overlay_count']}")
-    print(f"Coherence: {result['coherence']['coherence_coefficient']:.2f}")
-    print(f"Risk Level: {result['overlay_region']['risk_level']}")
-
-asyncio.run(analyze())
-```
-
-### 21-Day Prediction
-
-```python
-# Generate prediction
-prediction = await engine.generate_21day_prediction(
-    latitude=35.6762,
-    longitude=139.6503,
-    depth_km=15.0
-)
-
-# Access daily predictions
-for day in prediction['daily_predictions']:
-    print(f"Day {day['day']}: Risk {day['risk_level']} (Score: {day['risk_score']:.2f})")
-
-# Summary
-summary = prediction['summary']
-print(f"Peak Risk: Day {summary['peak_risk_day']} ({summary['peak_risk_level']})")
-```
-
-### Multi-Fault Region (Tokyo Example)
-
-```python
-# Triangulation points around Tokyo
-triangulation_points = [
-    (35.6762, 139.6503),  # Central Tokyo
-    (35.7, 139.7),        # Northeast
-    (35.6, 139.6),        # Southwest
-    (35.65, 139.75)       # East
-]
-
-result = await engine.analyze_multi_fault_region(
-    center_lat=35.6762,
-    center_lon=139.6503,
-    triangulation_points=triangulation_points,
-    depth_km=15.0
-)
-
-print(f"Regional Risk: {result['risk_level']}")
-print(f"Amplification Zones: {len(result['amplification_zones'])}")
-```
-
-## 🧪 Testing
-
-Run the comprehensive test suite:
-
-```bash
-# Run all tests
-pytest backend/features/tests/test_correlation_engine.py -v
-
-# Run with coverage
-pytest backend/features/tests/ --cov=backend/features --cov-report=html
-
-# Results: 20/20 tests passing ✅
-```
-
-## 🏗️ Architecture
+## 📁 Project Structure
 
 ```
 Earthquake_Enhanced/
 ├── backend/
+│   ├── experiments/
+│   │   └── tokyo/
+│   │       ├── __init__.py
+│   │       ├── run_experiment.py          # Main Tokyo experiment
+│   │       └── tests/
+│   │           ├── __init__.py
+│   │           └── test_tokyo_experiment.py
 │   ├── features/
-│   │   ├── space_engine.py          # Space weather correlation (8 features)
-│   │   ├── resonance.py             # Strain-rate analysis
-│   │   ├── correlation_engine.py    # Multi-resonance overlay (8 features)
+│   │   ├── __init__.py
+│   │   ├── config.yaml                    # System configuration
+│   │   ├── resonance.py                   # Resonance analysis
+│   │   ├── tri_feature.py                 # Triangle spatial features
+│   │   ├── correlation_engine.py          # Correlation analysis
+│   │   ├── space_engine.py                # Spatial analysis
 │   │   └── tests/
-│   │       └── test_correlation_engine.py
+│   │       ├── __init__.py
+│   │       ├── test_resonance.py
+│   │       ├── test_correlation_engine.py
+│   │       └── test_space_engine.py
 │   ├── models/
-│   │   └── database.py              # SQLAlchemy models
-│   ├── utils/
-│   └── api.py                       # FastAPI backend
+│   │   ├── __init__.py
+│   │   └── database.py
+│   ├── api/
+│   │   └── ...
+│   └── utils/
+│       └── __init__.py
+├── data/
+│   ├── raw/
+│   │   └── usgs_events/
+│   │       └── 2022_tokyo_07e0d7f2a.json  # 2022 Tokyo earthquake data
+│   ├── metadata/
+│   │   └── 2022_tokyo_07e0d7f2a.yaml      # Data metadata
+│   └── processed/
+├── artifacts/                              # Generated experiment outputs
+├── config/
+├── docs/
 ├── frontend/
-│   ├── static/
-│   │   ├── css/
-│   │   │   ├── main.css
-│   │   │   └── visualization.css
-│   │   └── js/
-│   │       ├── api.js               # API client
-│   │       ├── visualization3d.js   # Three.js 3D viz
-│   │       ├── prediction.js        # Prediction charts
-│   │       ├── patterns.js          # Pattern analysis
-│   │       ├── analytics.js         # Dashboard
-│   │       └── main.js              # Main app logic
-│   └── templates/
-│       └── visualization.html       # Main UI
-├── requirements.txt
-└── README.md
+├── scripts/
+├── requirements.txt                        # Python dependencies
+├── test_system.py
+├── .gitignore
+└── README.md                              # This file
 ```
 
-## 📖 API Documentation
+## 🚀 Installation
 
-### REST API Endpoints
+### Prerequisites
 
-- `GET /` - Root with endpoint list
-- `GET /api/status` - System status
-- `POST /api/analyze/single` - Single-point analysis
-- `POST /api/analyze/multi-fault` - Multi-fault region analysis
-- `POST /api/predict/21-day` - 21-day prediction
-- `GET /api/patterns/identify` - Pattern identification
-- `GET /api/overlays/statistics` - Overlay statistics
-- `GET /api/registry/summary` - Resonance registry summary
-- `GET /api/overlays/query` - Query overlays by criteria
-- `POST /api/space/predict` - Space engine prediction
-- `POST /api/resonance/analyze` - Resonance engine analysis
+- Python 3.11 or higher
+- pip package manager
+- Git
 
-Full API documentation available at `http://localhost:8000/docs` when running the server.
+### Step 1: Clone the Repository
 
-## 🔬 Methodology
-
-### Empirical Approach
-
-- **Real Data Only**: Uses NASA OMNI2 and NOAA SWPC data
-- **No Approximations**: All calculations use validated formulas
-- **Fail Gracefully**: Returns errors when data unavailable
-- **Pattern Recognition**: Identifies common denominators from historical data
-
-### Key Formulas
-
-**Wave Superposition**:
-```
-ψ(t) = Σᵢ Aᵢ * cos(2π * fᵢ * t + φᵢ)
+```bash
+git clone https://github.com/nbbulk-dotcom/Earthquake_Enhanced.git
+cd Earthquake_Enhanced
 ```
 
-**Coherence Coefficient**:
-```
-C = |Σᵢ Aᵢ * e^(iφᵢ)| / Σᵢ Aᵢ
-```
+### Step 2: Create Virtual Environment (Recommended)
 
-**RGB Resonance**:
-```
-RGB = sqrt((R² + G² + B²) / 3.0)
-```
+```bash
+python -m venv venv
 
-**Strain-Rate Tensor**:
-```
-εᵢⱼ = 1/2 (∂vᵢ/∂xⱼ + ∂vⱼ/∂xᵢ)
+# On Linux/Mac:
+source venv/bin/activate
+
+# On Windows:
+venv\Scripts\activate
 ```
 
-## 🎨 Visualization Features
+### Step 3: Install Dependencies
 
-- **3D Wireframe**: Real-time resonance overlay visualization
-- **Color Coding**: 
-  - Red: Constructive interference
-  - Blue: Destructive interference
-  - Yellow: Mixed interference
-- **Time-Series Animation**: 24-step temporal evolution
-- **Prediction Charts**: Interactive 21-day forecast
-- **Analytics Dashboard**: Real-time statistics and metrics
-
-## 🛠️ Configuration
-
-### Database
-
-Default: SQLite (`earthquake_enhanced.db`)
-
-For PostgreSQL:
-```python
-from backend.models import DatabaseManager
-
-db = DatabaseManager('postgresql://user:pass@localhost/earthquake_db')
+```bash
+pip install -r requirements.txt
 ```
 
-### API Settings
+### Step 4: Verify Installation
 
-Edit `backend/api.py`:
-```python
-# Change port
-uvicorn.run(app, host="0.0.0.0", port=8080)
-
-# CORS origins
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
-    ...
-)
+```bash
+python -c "import pandas, numpy, sklearn, lightgbm; print('All dependencies installed successfully!')"
 ```
 
-## 📝 Critical Constraints
+## ⚡ Quick Start
 
-1. ✅ **Real Data Only**: No fabricated or estimated values
-2. ✅ **Empirical Calculations**: Validated formulas from physics
-3. ✅ **Graceful Failures**: Proper error handling when data unavailable
-4. ✅ **Pattern Recognition**: Focus on identifying common denominators
-5. ✅ **Comprehensive Testing**: All features have unit tests
+### Run the Tokyo Experiment
+
+```bash
+# From the repository root
+python backend/experiments/tokyo/run_experiment.py
+```
+
+This will:
+1. Load the 2022 Tokyo earthquake data
+2. Engineer empirical features
+3. Create multi-horizon labels (7d, 14d, 30d)
+4. Train class-weighted models (Logistic Regression + LightGBM)
+5. Evaluate performance metrics
+6. Generate visualizations
+7. Save results to `artifacts/`
+
+Expected output location: `artifacts/tokyo_experiment_results.json`
+
+## 📊 Data Format
+
+### USGS GeoJSON Format
+
+The system uses standard USGS GeoJSON format for earthquake data:
+
+```json
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "generated": 1761222499000,
+    "count": 586,
+    "url": "https://earthquake.usgs.gov/fdsnws/event/1/query?..."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "us7000j12e",
+      "properties": {
+        "mag": 4.4,
+        "place": "5 km ENE of Sakai, Japan",
+        "time": 1672413006152,
+        "status": "reviewed",
+        "tsunami": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.8576, 36.1139, 56.826]
+      }
+    }
+  ]
+}
+```
+
+### Data Location
+
+- **Raw Data**: `data/raw/usgs_events/`
+- **Metadata**: `data/metadata/`
+- **Test Data**: 2022 Tokyo region data included in repository
+
+### Data Coverage
+
+- **Region**: Tokyo area (30.0°N - 38.5°N, 136.0°E - 145.0°E)
+- **Time Period**: 2022-01-01 to 2022-12-31
+- **Magnitude Range**: ≥ 3.5
+- **Event Count**: 586 earthquakes
+
+## 🧪 Running Experiments
+
+### Tokyo Multi-Horizon Experiment
+
+```bash
+cd Earthquake_Enhanced
+python backend/experiments/tokyo/run_experiment.py
+```
+
+**What it does:**
+- Loads 2022 Tokyo earthquake data
+- Computes rolling temporal features (7d, 30d, 90d windows)
+- Calculates cumulative seismic moment
+- Measures distance to recent large events (M≥5.0)
+- Creates multi-horizon labels (7d, 14d, 30d)
+- Trains class-weighted models
+- Evaluates: Precision, Recall, F1, ROC-AUC, Brier Score
+- Saves results and visualizations
+
+**Expected Runtime:** 30-60 seconds
+
+### Custom Experiments
+
+To create your own experiment:
+
+1. Create a new directory: `backend/experiments/your_experiment/`
+2. Add `__init__.py` and `run_experiment.py`
+3. Load data from `data/raw/usgs_events/`
+4. Use configuration from `backend/features/config.yaml`
+5. Save results to `artifacts/`
+
+## 🧪 Running Tests
+
+### Run All Tests
+
+```bash
+# From repository root
+pytest -v
+```
+
+### Run Specific Test Suites
+
+```bash
+# Tokyo experiment tests
+pytest backend/experiments/tokyo/tests/ -v
+
+# Resonance engine tests
+pytest backend/features/tests/test_resonance.py -v
+
+# All feature tests
+pytest backend/features/tests/ -v
+```
+
+### Run with Coverage
+
+```bash
+pytest --cov=backend --cov-report=html
+```
+
+### Test Structure
+
+- **Unit Tests**: Test individual functions and classes
+- **Integration Tests**: Test full experiment pipeline
+- **Edge Case Tests**: Test error handling and boundary conditions
+
+## 🔧 Key Components
+
+### 1. Tokyo Experiment (`backend/experiments/tokyo/run_experiment.py`)
+
+Main experiment implementing multi-horizon earthquake prediction with:
+- Empirical feature engineering
+- Class-weighted models (Logistic Regression, LightGBM)
+- Multi-horizon labeling (7d, 14d, 30d)
+- Comprehensive evaluation metrics
+
+**Key Functions:**
+- `haversine_distance()`: Calculate great-circle distance
+- `calculate_seismic_moment()`: Hanks & Kanamori (1979) formula
+- `run_tokyo_experiment()`: Main pipeline
+
+### 2. Resonance Engine (`backend/features/resonance.py`)
+
+Physics-based resonance analysis:
+- Strain-rate tensor calculations
+- Crustal stress resonance
+- Schumann resonance harmonics
+- Seismic wave propagation modeling
+
+### 3. Triangle Features (`backend/features/tri_feature.py`)
+
+Geometric spatial pattern analysis:
+- Triangle detection from earthquake triplets
+- Area, perimeter, aspect ratio, compactness metrics
+- Spatial clustering indicators
+
+**Key Functions:**
+- `find_earthquake_triangles()`: Detect triangle patterns
+- `calculate_triangle_metrics()`: Compute geometric features
+- `compute_triangle_features()`: Aggregate for daily prediction
+
+### 4. Configuration (`backend/features/config.yaml`)
+
+Centralized system configuration:
+- Feature engineering parameters
+- Model hyperparameters
+- Experiment settings
+- Data quality thresholds
+
+## ⚙️ Configuration
+
+Edit `backend/features/config.yaml` to customize:
+
+```yaml
+# Example: Modify prediction horizons
+experiment:
+  prediction_horizons: [7, 14, 30]  # Days
+  magnitude_threshold: 5.0          # M≥5.0 for labeling
+
+# Example: Adjust feature windows
+features:
+  temporal_windows: [7, 14, 30, 90]  # Days
+  magnitude_thresholds: [3.5, 4.0, 4.5, 5.0, 5.5]
+```
+
+## 📈 Results and Artifacts
+
+After running experiments, find outputs in `artifacts/`:
+
+```
+artifacts/
+├── tokyo_experiment_results.json       # Metrics for all horizons
+├── tokyo_daily_features.csv            # Processed daily features
+└── tokyo_experiment_predictions.png    # Visualization
+```
+
+### Sample Results Structure
+
+```json
+{
+  "7d": {
+    "logistic_regression": {
+      "precision": 0.xxx,
+      "recall": 0.xxx,
+      "f1": 0.xxx,
+      "roc_auc": 0.xxx,
+      "brier": 0.xxx
+    },
+    "lightgbm": { ... }
+  },
+  "14d": { ... },
+  "30d": { ... }
+}
+```
+
+## 🤖 For External AI Evaluation
+
+### Accessing the Package
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/nbbulk-dotcom/Earthquake_Enhanced.git
+   cd Earthquake_Enhanced
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Verify data integrity:**
+   ```bash
+   ls -lh data/raw/usgs_events/2022_tokyo_07e0d7f2a.json
+   ls -lh data/metadata/2022_tokyo_07e0d7f2a.yaml
+   ```
+
+4. **Run the experiment:**
+   ```bash
+   python backend/experiments/tokyo/run_experiment.py
+   ```
+
+5. **Run tests:**
+   ```bash
+   pytest -v
+   ```
+
+### Evaluation Checklist
+
+- ✅ **Data Integrity**: USGS GeoJSON with 586 Tokyo earthquakes (2022)
+- ✅ **Reproducibility**: Fixed random seeds, deterministic pipeline
+- ✅ **Feature Engineering**: Empirical features (seismic moment, distance, temporal)
+- ✅ **Multi-Horizon**: 7d, 14d, 30d prediction windows
+- ✅ **Class Weighting**: Handles severe class imbalance
+- ✅ **Comprehensive Testing**: Unit tests, integration tests, edge cases
+- ✅ **Documentation**: Complete README, inline code comments
+- ✅ **Configuration**: Centralized config.yaml
+- ✅ **Results**: JSON metrics, CSV features, PNG visualizations
+
+### Key Files to Review
+
+1. `backend/experiments/tokyo/run_experiment.py` - Main experiment logic
+2. `backend/features/config.yaml` - System configuration
+3. `data/raw/usgs_events/2022_tokyo_07e0d7f2a.json` - Test data
+4. `backend/experiments/tokyo/tests/test_tokyo_experiment.py` - Test suite
+5. `backend/features/tri_feature.py` - Spatial feature engineering
+6. `backend/features/resonance.py` - Physics-based analysis
+
+### Expected Behavior
+
+The Tokyo experiment should:
+- Load 586 events from 2022 Tokyo data
+- Create features with 7d, 30d, 90d rolling windows
+- Generate multi-horizon labels with class imbalance (~1-5% positive)
+- Train models with class weighting
+- Produce evaluation metrics (precision, recall, F1, ROC-AUC, Brier)
+- Save results to `artifacts/`
 
 ## 🤝 Contributing
+
+We welcome contributions! Please follow these guidelines:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -378,36 +412,64 @@ app.add_middleware(
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+### Development Guidelines
+
+- Follow PEP 8 style guide
+- Add tests for new features
+- Update documentation
+- Maintain backward compatibility
+- Use descriptive commit messages
+
+## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## 📧 Contact
 
-- NASA OMNI2 for space weather data
-- NOAA SWPC for real-time space data
-- BRETT System architecture
-- Open-source community
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/nbbulk-dotcom/Earthquake_Enhanced/issues)
-- **Documentation**: [Full Docs](docs/TECHNICAL.md)
-- **API Docs**: http://localhost:8000/docs (when running)
-
-## 🔮 Future Enhancements
-
-- [ ] Real-time data streaming from NASA/NOAA
-- [ ] Machine learning pattern classification
-- [ ] Mobile app for visualization
-- [ ] Integration with seismic databases
-- [ ] Historical earthquake correlation analysis
-- [ ] Expanded tectonic plate boundary database
+For questions or support, please open an issue on GitHub.
 
 ---
 
-**Version**: 1.0.0  
-**Built with**: Python, FastAPI, Three.js, SQLAlchemy  
-**System**: BRETT Multi-Resonance Correlation Engine
+## 🔍 Technical Details
 
-🌍 **Making earthquake prediction through resonance pattern recognition**
+### Feature Engineering
+
+**Temporal Features:**
+- Rolling counts (7d, 30d, 90d)
+- Rolling mean/max magnitude
+- Rolling mean depth
+
+**Empirical Features:**
+- Cumulative seismic moment (log10 scale)
+- Distance to nearest M≥5.0 event (90d window)
+- Triangle spatial patterns (optional)
+
+**Physics-Based Features:**
+- Resonance analysis (Schumann frequencies)
+- Strain-rate calculations
+- Crustal stress indicators
+
+### Model Architecture
+
+**Logistic Regression:**
+- Class weight: 'balanced'
+- Max iterations: 1000
+- Solver: lbfgs (default)
+
+**LightGBM:**
+- Scale positive weight: automatic
+- Learning rate: 0.05
+- Max depth: 6
+- N estimators: 100
+
+### Evaluation Metrics
+
+- **Precision**: Positive predictive value
+- **Recall**: True positive rate (sensitivity)
+- **F1 Score**: Harmonic mean of precision and recall
+- **ROC-AUC**: Area under receiver operating characteristic curve
+- **Brier Score**: Mean squared error of probabilistic predictions
+
+---
+
+**Built with ❤️ for advancing earthquake science and public safety**

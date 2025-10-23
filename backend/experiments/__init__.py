@@ -1,0 +1,3 @@
+"""
+Earthquake prediction experiments module.
+"""
