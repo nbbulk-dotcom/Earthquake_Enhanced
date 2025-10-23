@@ -290,5 +290,3 @@ async def startup_event():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
-
-User Interface (frontend/index.html)I've created a simple browser-based UI using HTML, CSS, and JavaScript (vanilla, no frameworks) that interacts with the API. It has forms for each endpoint, sends JSON requests via fetch, and displays responses. Assume the API is at http://localhost:8000 (change to deployed URL for online testing). Copy-paste into frontend/index.html. To publish, DEEPAGENT can host it on GitHub Pages or a server (e.g., add to repo and enable Pages).For online testing, upload to the repo and use a link like https://nbbulk-dotcom.github.io/Earthquake_Enhanced/frontend/index.html (after adding to gh-pages branch).html
