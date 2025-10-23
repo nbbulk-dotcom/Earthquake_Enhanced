@@ -1,4 +1,3 @@
-
 # File: backend/api/main.py
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks
@@ -19,13 +18,13 @@ class CorrelationEngine:
     def get_engine_status(self):
         return {"status": "stub - healthy"}
 
-    def analyze_single_point(self, lat: float, lon: float, depth: float):
+    async def analyze_single_point(self, lat: float, lon: float, depth: float):
         return {"analysis": "stub single point result"}
 
-    def analyze_multi_fault_region(self, center_lat: float, center_lon: float, points: List[Tuple[float, float]], depth: float):
+    async def analyze_multi_fault_region(self, center_lat: float, center_lon: float, points: List[Tuple[float, float]], depth: float):
         return {"analysis": "stub multi fault result"}
 
-    def generate_21day_prediction(self, lat: float, lon: float, depth: float):
+    async def generate_21day_prediction(self, lat: float, lon: float, depth: float):
         return {"prediction": "stub 21-day result"}
 
     def identify_recurring_patterns(self, days: int):
@@ -44,7 +43,7 @@ class SpaceEngine:
     def get_engine_status(self):
         return {"status": "stub - healthy"}
 
-    def calculate_space_prediction(self, lat: float, lon: float):
+    async def calculate_space_prediction(self, lat: float, lon: float):
         return {"space_prediction": "stub"}
 
 class ResonanceEngine:
@@ -291,3 +290,5 @@ async def startup_event():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
+
+User Interface (frontend/index.html)I've created a simple browser-based UI using HTML, CSS, and JavaScript (vanilla, no frameworks) that interacts with the API. It has forms for each endpoint, sends JSON requests via fetch, and displays responses. Assume the API is at http://localhost:8000 (change to deployed URL for online testing). Copy-paste into frontend/index.html. To publish, DEEPAGENT can host it on GitHub Pages or a server (e.g., add to repo and enable Pages).For online testing, upload to the repo and use a link like https://nbbulk-dotcom.github.io/Earthquake_Enhanced/frontend/index.html (after adding to gh-pages branch).html
