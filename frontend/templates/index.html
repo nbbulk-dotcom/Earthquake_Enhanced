@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earthquake Enhanced - Space Engine</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🌍 Earthquake Enhanced - Space Engine</h1>
+            <p class="subtitle">Space Weather Correlation & Earthquake Prediction System</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Control Panel -->
+        <section class="panel">
+            <h2>📍 Location & Parameters</h2>
+            <form id="predictionForm">
+                <div class="form-group">
+                    <label for="latitude">Latitude:</label>
+                    <input type="number" id="latitude" step="0.01" min="-90" max="90" value="35.0" required>
+                </div>
+                <div class="form-group">
+                    <label for="longitude">Longitude:</label>
+                    <input type="number" id="longitude" step="0.01" min="-180" max="180" value="140.0" required>
+                </div>
+                <div class="form-group">
+                    <label for="timestamp">Timestamp (UTC):</label>
+                    <input type="datetime-local" id="timestamp">
+                </div>
+                <button type="submit" class="btn-primary">Calculate Prediction</button>
+            </form>
+        </section>
+
+        <!-- Results Display -->
+        <section class="panel" id="resultsPanel" style="display: none;">
+            <h2>📊 Prediction Results</h2>
+            
+            <!-- Earthquake Correlation Score -->
+            <div class="result-box highlight">
+                <h3>Earthquake Correlation Score</h3>
+                <div class="score-display">
+                    <span id="correlationScore" class="score-value">--</span>
+                    <span class="score-label">/ 1.00</span>
+                </div>
+                <div class="score-bar">
+                    <div id="correlationBar" class="score-bar-fill"></div>
+                </div>
+            </div>
+
+            <!-- Solar Angles -->
+            <div class="result-box">
+                <h3>☀️ Solar Angles</h3>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <span class="label">Elevation:</span>
+                        <span id="solarElevation" class="value">--</span>°
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Azimuth:</span>
+                        <span id="solarAzimuth" class="value">--</span>°
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Zenith:</span>
+                        <span id="solarZenith" class="value">--</span>°
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Declination:</span>
+                        <span id="solarDeclination" class="value">--</span>°
+                    </div>
+                </div>
+            </div>
+
+            <!-- RGB Resonance -->
+            <div class="result-box">
+                <h3>🌈 RGB Resonance</h3>
+                <div class="rgb-display">
+                    <div class="rgb-component">
+                        <div class="rgb-bar r-bar">
+                            <div id="rBar" class="rgb-bar-fill"></div>
+                        </div>
+                        <span>R: <span id="rValue">--</span></span>
+                    </div>
+                    <div class="rgb-component">
+                        <div class="rgb-bar g-bar">
+                            <div id="gBar" class="rgb-bar-fill"></div>
+                        </div>
+                        <span>G: <span id="gValue">--</span></span>
+                    </div>
+                    <div class="rgb-component">
+                        <div class="rgb-bar b-bar">
+                            <div id="bBar" class="rgb-bar-fill"></div>
+                        </div>
+                        <span>B: <span id="bValue">--</span></span>
+                    </div>
+                </div>
+                <div class="result-item highlight-box">
+                    <span class="label">RGB Resonance:</span>
+                    <span id="rgbResonance" class="value large">--</span>
+                </div>
+            </div>
+
+            <!-- Lag Times -->
+            <div class="result-box">
+                <h3>⏱️ Dynamic Lag Times</h3>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <span class="label">Light Travel:</span>
+                        <span id="lightTravel" class="value">--</span> hours
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Solar Lag:</span>
+                        <span id="solarLag" class="value">--</span> hours
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Geomagnetic Lag:</span>
+                        <span id="geomagLag" class="value">--</span> hours
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Ionospheric Lag:</span>
+                        <span id="ionoLag" class="value">--</span> hours
+                    </div>
+                    <div class="result-item highlight-box">
+                        <span class="label">Total Lag:</span>
+                        <span id="totalLag" class="value">--</span> hours
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location Details -->
+            <div class="result-box">
+                <h3>🧭 Location Details</h3>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <span class="label">Magnetic Latitude:</span>
+                        <span id="magLatitude" class="value">--</span>°
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Tetrahedral (Seismic):</span>
+                        <span id="tetraSeismic" class="value">--</span>°
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Equatorial Enhancement:</span>
+                        <span id="equatorialFactor" class="value">--</span>x
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Atmospheric Correction:</span>
+                        <span id="atmCorrection" class="value">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resultant Resonance -->
+            <div class="result-box">
+                <h3>🎯 Resultant Resonance (12D Correlation)</h3>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <span class="label">Resultant Resonance:</span>
+                        <span id="resultantResonance" class="value">--</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Matrix Contribution:</span>
+                        <span id="matrixContribution" class="value">--</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Dominant Eigenvalue:</span>
+                        <span id="dominantEigen" class="value">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Space Data Status -->
+            <div class="result-box">
+                <h3>📡 Space Data Integration</h3>
+                <div id="spaceDataStatus" class="status-box">
+                    <p>Loading space weather data...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sun Path Visualization -->
+        <section class="panel" id="sunPathPanel" style="display: none;">
+            <h2>🌅 24-Hour Sun Path</h2>
+            <div id="sunPathChart" class="chart-container"></div>
+        </section>
+
+        <!-- Features Panel -->
+        <section class="panel features-panel">
+            <h2>✨ Implemented Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Atmospheric Boundary Refraction</h3>
+                    <p>80km (1.15) & 85km (1.12) calibration factors</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📐</div>
+                    <h3>Angle of Incidence Tracking</h3>
+                    <p>Solar elevation, tetrahedral angles, magnetic latitude</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">☀️</div>
+                    <h3>Sun Path Prediction</h3>
+                    <p>Stationary Earth reference frame predictions</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <h3>Dynamic Lag Calculation</h3>
+                    <p>Physics-based space-to-Earth delays</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌈</div>
+                    <h3>RGB Resonance</h3>
+                    <p>Space variable mapping: R=solar, G=magnetic, B=particle</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📡</div>
+                    <h3>Data Integration</h3>
+                    <p>NASA OMNI2 (88%) & NOAA SWPC (92%)</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Resultant Resonance</h3>
+                    <p>12D correlation matrix analysis</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Equatorial Enhancement</h3>
+                    <p>1.25x factor for equatorial regions</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Earthquake Enhanced - Space Engine v1.0.0</p>
+            <p>BRETT System | Empirical Data Only | No Assumptions</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../static/js/app.js"></script>
+</body>
+</html>
